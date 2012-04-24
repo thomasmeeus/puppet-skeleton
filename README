@@ -1,0 +1,20 @@
+$ puppet resource_type find --modulepath=. skeleton::puppetmodule
+{"line":1,"arguments":{"username":null,"basedir":null,"modulename":null},"name":"skeleton::puppetmodule","type":"hostclass","file":"/home/bkkrw/clone/modules/skeleton/manifests/puppetmodule.pp"}
+
+$ puppet resource_type search --modulepath=. 'skeleton::*'
+[{"name":"skeleton::puppetmodule","line":1,"type":"hostclass","arguments":{"modulename":null,"basedir":null,"username":null},"file":"/home/bkkrw/clone/modules/skeleton/manifests/puppetmodule.pp"},{"name":"skeleton::bla","line":1,"type":"hostclass","file":"/home/bkkrw/clone/modules/skeleton/manifests/bla.pp"}]
+
+$ puppet apply --modulepath=. --execute "class { 'skeleton::puppetmodule': username => 'willaerk', modulename => 'test', basedir => '/tmp' }"
+
+Replace parameter for file resource: Whether to replace a file that already exists on the local system but whose content doesn’t match what the source or content attribute specifies. Setting this to false allows file resources to initialize files without overwriting future changes. Note that this only affects content; Puppet will still manage ownership and permissions. Valid values are true (also called yes), false (also called no).
+
+$ puppet apply --modulepath=. --execute "class { 'skeleton': }"
+
+$ puppet config print modulepath
+
+$ puppet doc -m text <module>/manifests/<class>.pp
+
+$ skeleton list [--modulepath <path>] 
+$ skeleton doc --type <type> [--modulepath <path>]
+$ skeleton args --type <type> [--modulepath <path>]
+$ skeleton create --type <type> --args <arg hash> [--modulepath <path>]
