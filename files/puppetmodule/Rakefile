@@ -2,6 +2,10 @@ require 'rubygems'
 require 'rake/clean'
 require 'rspec/core/rake_task'
 
+$:.unshift(File.join(File.dirname(__FILE__), 'build'))
+require 'rpm_packager'
+require 'deb_packager'
+
 CLEAN.include("")
 CLOBBER.include("target")
 
@@ -57,6 +61,7 @@ task :style do
   puts "Checking puppet module code style..."
   linter = PuppetLint.new
   linter.configuration.log_format = '%{path}:%{linenumber}:%{check}:%{KIND}:%{message}'
+  linter.configuration.send("disable_80chars")
 
   FileList['**/*.pp'].each do |puppet_file|
     puts "Evaluating code style for #{puppet_file}"
@@ -107,16 +112,24 @@ task :doc do
   end
 end
 
-desc "Create RPM package."
-task :rpm => [:build] do
-  puts "Creating RPM package..."
-  # rpmbuild -ba / -bb
+desc "Create RPM package from puppet module."
+task :rpm do
+  puts "Creating RPM package from puppet module..."
+  module_name = ENV["JOB_NAME"].split('-')[1]
+
+  rpm_packager = RpmPackager.new
+  output = rpm_packager.build(module_name)
+  puts output
 end
   
-desc "Create DEB package."
-task :deb => [:build]  do
-  puts "Creating DEB package..."
-  # debuild
+desc "Create DEB package from puppet module."
+task :deb do
+  puts "Creating DEB package from puppet module..."
+  module_name = ENV["JOB_NAME"].split('-')[1]
+  
+  deb_packager = DebPackager.new
+  output = deb_packager.build(module_name)
+  puts output
 end
 
 desc "Create a puppet module, compatible with Puppet Forge."
@@ -170,5 +183,22 @@ namespace "jenkins" do
     FileUtils.mkdir_p(ACCEPTANCE_REPORTS_PATH)
     
     Rake::Task[:acceptance].invoke
+  end
+
+  desc "Archive job configuration in YAML format."
+  task :archive_job_configuration do
+    dist_dir = "target/dist"
+
+    module_name = ENV["JOB_NAME"]
+    git_commit = ENV["GIT_COMMIT"]
+    
+    if !git_commit.nil? and !git_commit.empty?
+      puts "Saving #{module_name}.yaml file" 
+      FileUtils.mkdir_p(dist_dir)
+      open("target/dist/#{module_name}.yaml", "w") { |file|
+	file.puts "module_name: #{module_name}"
+	file.puts "git_commit: #{git_commit}"
+      }
+    end
   end
 end

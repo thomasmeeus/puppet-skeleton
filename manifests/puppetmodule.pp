@@ -32,6 +32,29 @@ class skeleton::puppetmodule($modulename, $basedir, $username, $overwrite = fals
     require => File["${basedir}/${modulename}"],
   }
 
+  file { "${basedir}/${modulename}/build":
+    ensure => directory,
+    require => File["${basedir}/${modulename}"],
+  }
+
+  file { "${basedir}/${modulename}/build/packager.rb":
+    ensure  => file,
+    source => 'puppet:///modules/skeleton/puppetmodule/build/packager.rb',
+    require => File["${basedir}/${modulename}/build"],
+  }
+
+  file { "${basedir}/${modulename}/build/rpm_packager.rb":
+    ensure  => file,
+    source => 'puppet:///modules/skeleton/puppetmodule/build/rpm_packager.rb',
+    require => File["${basedir}/${modulename}/build"],
+  }
+
+  file { "${basedir}/${modulename}/build/deb_packager.rb":
+    ensure  => file,
+    source => 'puppet:///modules/skeleton/puppetmodule/build/deb_packager.rb',
+    require => File["${basedir}/${modulename}/build"],
+  }
+
   file { "${basedir}/${modulename}/examples":
     ensure => directory,
     require => File["${basedir}/${modulename}"],
