@@ -1,6 +1,6 @@
-require 'base_packager'
+require 'packager'
 
-class RpmPackager < BasePackager
+class RpmPackager < Packager
 
   PACKAGETYPE = "rpm"
 

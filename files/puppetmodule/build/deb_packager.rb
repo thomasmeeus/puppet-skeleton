@@ -1,6 +1,6 @@
-require 'base_packager'
+require 'packager'
 
-class DebPackager < BasePackager
+class DebPackager < Packager
 
   PACKAGETYPE = "deb"
 
