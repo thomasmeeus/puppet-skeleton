@@ -86,9 +86,9 @@ class skeleton::puppetmodule::tasks($modulename, $basedir, $username, $overwrite
     require => File["${basedir}/${modulename}/tasks/rake"],
   }
 
-  file { "${basedir}/${modulename}/tasks/rake/lib/modulefile_reader.rb":
+  file { "${basedir}/${modulename}/tasks/rake/lib/version_helper.rb":
     ensure  => file,
-    source  => 'puppet:///modules/skeleton/puppetmodule/tasks/rake/lib/modulefile_reader.rb',
+    source  => 'puppet:///modules/skeleton/puppetmodule/tasks/rake/lib/version_helper.rb',
     require => File["${basedir}/${modulename}/tasks/rake/lib"],
   }
 
