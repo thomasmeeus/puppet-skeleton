@@ -20,7 +20,7 @@ class skeleton::puppetmodule::tasks($modulename, $basedir, $username, $overwrite
     require => File["${basedir}/${modulename}"],
   }
 
-  file { [ "${basedir}/${modulename}/tasks", "${basedir}/${modulename}/tasks/rake", 
+  file { [ "${basedir}/${modulename}/tasks", "${basedir}/${modulename}/tasks/rake",
             "${basedir}/${modulename}/tasks/rake/lib", "${basedir}/${modulename}/tasks/rake/lib/packaging" ]:
     ensure => directory,
     require => File["${basedir}/${modulename}"],
@@ -36,6 +36,12 @@ class skeleton::puppetmodule::tasks($modulename, $basedir, $username, $overwrite
     ensure  => file,
     source  => 'puppet:///modules/skeleton/puppetmodule/tasks/Gemfile',
     require => File["${basedir}/${modulename}/tasks"],
+  }
+
+  file { "${basedir}/${modulename}/tasks/rake/build.rake":
+    ensure  => file,
+    source  => 'puppet:///modules/skeleton/puppetmodule/tasks/rake/build.rake',
+    require => File["${basedir}/${modulename}/tasks/rake"],
   }
 
   file { "${basedir}/${modulename}/tasks/rake/clean.rake":
