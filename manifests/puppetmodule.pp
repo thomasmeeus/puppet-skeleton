@@ -20,6 +20,12 @@ class skeleton::puppetmodule($modulename, $basedir, $username, $overwrite = fals
     require => File["${basedir}/${modulename}"],
   }
 
+  file { "${basedir}/${modulename}/.fixtures.yml":
+    ensure  => file,
+    content => template('skeleton/puppetmodule/.fixtures.yml.erb'),
+    require => File["${basedir}/${modulename}"],
+  }
+
   file { "${basedir}/${modulename}/examples":
     ensure => directory,
     require => File["${basedir}/${modulename}"],
