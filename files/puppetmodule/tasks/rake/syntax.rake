@@ -8,6 +8,8 @@ task :syntax do
     fail 'Cannot load puppet/face, are you sure you have Puppet 2.7?'
   end
 
+  Puppet.initialize_settings
+
   puts "Checking puppet module syntax..."
 
   success = true
